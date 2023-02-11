@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,8 @@ namespace Calculator
     public enum ElementaryArithmeticOperations
     {
         Addition,
-        Subtraction, 
-        Multiplication, 
+        Subtraction,
+        Multiplication,
         Division
     }
 
@@ -80,5 +81,60 @@ namespace Calculator
             }
             return Math.Log(antilogarithm) / Math.Log(baseNum);
         }
+    }
+
+    public sealed class AbsOperator : IUnaryOperator<double>, IUnaryOperator<BigInteger>
+    {
+        public BigInteger Calculate(BigInteger x)
+        {
+            return BigInteger.Abs(x);
+        }
+
+        public double Calculate(double x)
+        {
+            return Math.Abs(x);
+        }
+    }
+
+    public sealed class RootOperator : IBinaryOperator<double>
+    {
+        public double Calculate(double radicand, double rootIndex)
+        {
+            return Math.Pow(radicand, Math.ReciprocalEstimate(rootIndex));
+        }
+    }
+
+    public sealed class TrigOperator : IUnaryOperator<double>
+    {
+        public TrigOperations Operation { get; }
+
+        public TrigOperator(TrigOperations operation)
+        {
+            Operation = operation;
+        }
+
+        public double Calculate(double x)
+        {
+            return Operation switch
+            {
+                TrigOperations.Sin => Math.Sin(x),
+                TrigOperations.Cos => Math.Cos(x),
+                TrigOperations.Tan => Math.Tan(x),
+                TrigOperations.Sec => Math.ReciprocalEstimate(Math.Cos(x)),
+                TrigOperations.Csc => Math.ReciprocalEstimate(Math.Sin(x)),
+                TrigOperations.Cot => Math.ReciprocalEstimate(Math.Tan(x)),
+                _ => 0
+            };
+        }
+    }
+
+    public enum TrigOperations
+    {
+        Sin,
+        Cos,
+        Tan,
+        Sec,
+        Csc,
+        Cot
     }
 }
