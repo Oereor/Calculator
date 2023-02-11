@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator"
+        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Calculator" Height="450" Width="800">
+        Title="Calculator" Height="150" Width="500">
     <Grid>
-        
+        <StackPanel Name="mainPanel" Width="480">
+            <TextBox x:Name="textBox_Input" materialdesign:HintAssist.Hint="Input" materialdesign:HintAssist.IsFloating="True" FontSize="14" MaxWidth="{Binding ActualWidth,ElementName=mainPanel}"/>
+            <TextBox x:Name="textBox_Output" materialdesign:HintAssist.Hint="Output" materialdesign:HintAssist.IsFloating="True" FontSize="18" MaxWidth="{Binding ActualWidth,ElementName=mainPanel}" IsEnabled="False"/>
+        </StackPanel>
     </Grid>
 </Window>
