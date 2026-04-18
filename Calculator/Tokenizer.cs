@@ -22,8 +22,9 @@ namespace Calculator
         Sin,
         Cos,
         Tan,
-        OpenParanthesis,
-        CloseParanthesis
+        Neg,
+        OpenParenthesis,
+        CloseParenthesis
     }
 
     public class Token
@@ -52,6 +53,7 @@ namespace Calculator
         public Tokenizer(string expression)
         {
             Tokens = new List<Token>();
+            expression = expression.Trim();
             Tokenize(expression);
         }
 
@@ -62,31 +64,25 @@ namespace Calculator
             {'*', OperatorType.Multiply},
             {'/', OperatorType.Divide},
             {'^', OperatorType.Power},
-            {'(', OperatorType.OpenParanthesis},
-            {')', OperatorType.CloseParanthesis}
-        };
-
-        private static readonly Dictionary<OperatorType, Func<double, double>> functionMap = new()
-        {
-            {OperatorType.Sqrt, Math.Sqrt},
-            {OperatorType.Log, Math.Log},
-            {OperatorType.Sin, Math.Sin},
-            {OperatorType.Cos, Math.Cos},
-            {OperatorType.Tan, Math.Tan}
+            {'(', OperatorType.OpenParenthesis},
+            {')', OperatorType.CloseParenthesis}
         };
 
         private static readonly Dictionary<OperatorType, int> precedenceMap = new()
         {
+            {OperatorType.OpenParenthesis, 0},
+            {OperatorType.CloseParenthesis, 0},
             {OperatorType.Add, 1},
             {OperatorType.Subtract, 1},
             {OperatorType.Multiply, 2},
             {OperatorType.Divide, 2},
-            {OperatorType.Power, 3},
+            {OperatorType.Power, 4},
             {OperatorType.Sqrt, 4},
             {OperatorType.Log, 4},
             {OperatorType.Sin, 4},
             {OperatorType.Cos, 4},
-            {OperatorType.Tan, 4}
+            {OperatorType.Tan, 4},
+            {OperatorType.Neg, 3}
         };
 
         private void Tokenize(string expression)
@@ -95,6 +91,11 @@ namespace Calculator
             int index = 0;
             while (index < expression.Length)
             {
+                if (char.IsWhiteSpace(expression[index]))
+                {
+                    index++;
+                    continue;
+                }
                 Token token = ScanNextToken(expression, ref index);
                 if (token.Type == TokenType.Number)
                 {
@@ -102,20 +103,24 @@ namespace Calculator
                 }
                 else if (token.Type == TokenType.Operator)
                 {
-                    if (token.Operator == OperatorType.OpenParanthesis)
+                    if (token.Operator == OperatorType.OpenParenthesis)
                     {
                         operators.Push(token.Operator);
                     }
-                    else if (token.Operator == OperatorType.CloseParanthesis)
+                    else if (token.Operator == OperatorType.CloseParenthesis)
                     {
                         while (operators.Count > 0)
                         {
                             OperatorType op = operators.Pop();
-                            if (op == OperatorType.OpenParanthesis)
+                            if (op == OperatorType.OpenParenthesis)
                             {
                                 break;
                             }
                             Tokens.Add(new Token(op));
+                        }
+                        if (operators.Count > 0 && IsUnaryFunction(operators.Peek()))
+                        {
+                            Tokens.Add(new Token(operators.Pop()));
                         }
                     }
                     else
@@ -137,11 +142,6 @@ namespace Calculator
 
         private static Token ScanNextToken(string expression, ref int index)
         {
-            while (index < expression.Length && char.IsWhiteSpace(expression[index]))
-            {
-                index++;
-            }
-
             char ch = expression[index];
             if (ch == 'e')
             {
@@ -152,6 +152,11 @@ namespace Calculator
             {
                 index++;
                 return new Token(Math.PI);
+            }
+            if (ch == '-' && (index == 0 || expression[index - 1] == '('))
+            {
+                index++;
+                return new Token(OperatorType.Neg);
             }
             if (char.IsDigit(ch))
             {
@@ -166,26 +171,23 @@ namespace Calculator
             if (char.IsLetter(ch))
             {
                 OperatorType function = ScanFunction(expression, ref index);
-                if (expression[index] == '(')
-                {
-                    double operand = ScanNumber(expression, ref index);
-                    if (expression[index] == ')')
-                    {
-                        index++;
-                    }
-                    double result = functionMap[function](operand);
-                    return new Token(result);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Expected '(' after function name");
-                }
+                return new Token(function);
             }
             throw new InvalidOperationException("Unexpected character: " + ch);
         }
 
         private static double ScanNumber(string expression, ref int index)
         {
+            if (expression[index] == 'e')
+            {
+                index++;
+                return Math.E;
+            }
+            if (expression[index] == 'π')
+            {
+                index++;
+                return Math.PI;
+            }
             StringBuilder numberBuilder = new();
             while (index < expression.Length && (char.IsDigit(expression[index]) || expression[index] == '.'))
             {
@@ -213,6 +215,13 @@ namespace Calculator
                 "tan" => OperatorType.Tan,
                 _ => throw new Exception($"Unknown function: {functionName}")
             };
+        }
+
+        private static bool IsUnaryFunction(OperatorType operatorType)
+        {
+            return operatorType == OperatorType.Sqrt || operatorType == OperatorType.Log ||
+                   operatorType == OperatorType.Sin || operatorType == OperatorType.Cos ||
+                   operatorType == OperatorType.Tan || operatorType == OperatorType.Neg;
         }
     }
 }
