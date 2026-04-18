@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="Calculator" Height="550" Width="450" ResizeMode="CanMinimize">
+    <Window.DataContext>
+        <local:FrontendViewModel/>
+    </Window.DataContext>
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,29 +31,36 @@
         </Border>
 
         <StackPanel Grid.Row="1" Margin="0,0,0,10">
-            <TextBox x:Name="InputTextBox"
+            <TextBox x:Name="UpperTextBox"
                      Margin="0,0,0,6"
                      Padding="8"
                      FontSize="22"
                      HorizontalContentAlignment="Right"
                      VerticalContentAlignment="Center"
                      Height="46"
-                     Text=""
+                     Text="{Binding UpperText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="True"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-            <TextBox x:Name="OutputTextBox"
+            <TextBox x:Name="LowerTextBox"
                      Padding="8"
                      FontSize="28"
                      FontWeight="SemiBold"
                      HorizontalContentAlignment="Right"
                      VerticalContentAlignment="Center"
                      Height="52"
-                     Text="0"
+                     Text="{Binding LowerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="True"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
         </StackPanel>
 
         <Grid Grid.Row="2">
+            <Grid.Resources>
+                <Style x:Key="NumberButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                    <Setter Property="Command" Value="{Binding NumberCommand}"/>
+                    <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
+                </Style>
+            </Grid.Resources>
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -75,26 +85,26 @@
 
                 <Button Content="xʸ" Margin="4"/>
                 <Button Content="x²" Margin="4"/>
-                <Button Content="7" Margin="4"/>
-                <Button Content="8" Margin="4"/>
-                <Button Content="9" Margin="4"/>
+                <Button Content="7" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="8" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="9" Margin="4" Style="{StaticResource NumberButton}"/>
 
                 <Button Content="+" Margin="4"/>
                 <Button Content="-" Margin="4"/>
-                <Button Content="4" Margin="4"/>
-                <Button Content="5" Margin="4"/>
-                <Button Content="6" Margin="4"/>
+                <Button Content="4" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="5" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="6" Margin="4" Style="{StaticResource NumberButton}"/>
 
                 <Button Content="×" Margin="4"/>
                 <Button Content="÷" Margin="4"/>
-                <Button Content="1" Margin="4"/>
-                <Button Content="2" Margin="4"/>
-                <Button Content="3" Margin="4"/>
+                <Button Content="1" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="2" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="3" Margin="4" Style="{StaticResource NumberButton}"/>
 
-                <Button Content="e" Margin="4"/>
-                <Button Content="π" Margin="4"/>
-                <Button Content="0" Margin="4"/>
-                <Button Content="." Margin="4"/>
+                <Button Content="e" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="π" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="0" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="." Margin="4" Style="{StaticResource NumberButton}"/>
                 <Button Content="=" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}"/>
             </UniformGrid>
         </Grid>
