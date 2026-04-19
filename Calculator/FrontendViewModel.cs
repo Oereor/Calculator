@@ -57,21 +57,38 @@ namespace Calculator
             }
         }
 
-        public ICommand NumberCommand { get; }
+        public ICommand AppendTextCommand { get; }
+
+        public ICommand AppendFunctionCommand { get; }
+
+        public ICommand ClearCommand { get; }
+
+        public ICommand DeleteLastCharCommand { get; }
+
+        public ICommand EqualsCommand { get; }
 
         public FrontendViewModel()
         {
             UpperText = string.Empty;
             LowerText = string.Empty;
-            NumberCommand = new RelayCommand(NumberButtonClicked, CanClickNumberButton);
+            _expression = string.Empty;
+            AppendTextCommand = new RelayCommand(AppendTextButtonClicked);
+            AppendFunctionCommand = new RelayCommand(AppendFunctionButtonClicked);
+            ClearCommand = new RelayCommand(ClearButtonClicked);
+            DeleteLastCharCommand = new RelayCommand(DeleteLastCharacter);
+            EqualsCommand = new RelayCommand(EqualsButtonClicked);
         }
+
+        private string _expression;
+
+        private double _calculationResult;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void NumberButtonClicked(object parameter)
+        private void AppendTextButtonClicked(object parameter)
         {
             if (parameter is string number)
             {
@@ -79,9 +96,86 @@ namespace Calculator
             }
         }
 
-        private bool CanClickNumberButton(object parameter)
+        private void AppendFunctionButtonClicked(object parameter)
         {
-            return true;
+            if (parameter is string functionName)
+            {
+                LowerText += functionName + "(";
+            }
+        }
+
+        private void ClearButtonClicked(object parameter)
+        {
+            if (parameter is string clearType)
+            {
+                ClearText(clearType);
+            }
+        }
+
+        private void DeleteLastCharacter(object parameter)
+        {
+            if (!string.IsNullOrEmpty(LowerText))
+            {
+                LowerText = LowerText[..^1];
+            }
+        }
+
+        private void EqualsButtonClicked(object parameter)
+        {
+            _expression = LowerText;
+            Stack<char> parenthesesStack = new();
+            for (int i = 0; i < _expression.Length; i++)
+            {
+                if (_expression[i] == '(')
+                {
+                    parenthesesStack.Push('(');
+                }
+                else if (_expression[i] == ')')
+                {
+                    if (parenthesesStack.Count == 0)
+                    {
+                        UpperText = "Error";
+                        LowerText = "Mismatched parentheses";
+                        return;
+                    }
+                    parenthesesStack.Pop();
+                }
+            }
+            while (parenthesesStack.Count > 0)
+            {
+                _expression += ')';
+                parenthesesStack.Pop();
+            }
+            CalculateResult(_expression);
+        }
+
+        private void CalculateResult(string expression)
+        {
+            try
+            {
+                BackendCalculator calculator = new(new Tokenizer(expression));
+                _calculationResult = calculator.Result;
+                UpperText = expression;
+                LowerText = _calculationResult.ToString();
+            }
+            catch (Exception ex)
+            {
+                UpperText = "Error";
+                LowerText = ex.Message;
+            }
+        }
+
+        private void ClearText(string clearType)
+        {
+            if (clearType == "C")
+            {
+                UpperText = string.Empty;
+                LowerText = string.Empty;
+            }
+            else if (clearType == "CE")
+            {
+                LowerText = string.Empty;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

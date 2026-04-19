@@ -37,7 +37,7 @@
                      FontSize="22"
                      HorizontalContentAlignment="Right"
                      VerticalContentAlignment="Center"
-                     Height="46"
+                     Height="48"
                      Text="{Binding UpperText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="True"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
@@ -47,7 +47,7 @@
                      FontWeight="SemiBold"
                      HorizontalContentAlignment="Right"
                      VerticalContentAlignment="Center"
-                     Height="52"
+                     Height="56"
                      Text="{Binding LowerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="True"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
@@ -55,8 +55,12 @@
 
         <Grid Grid.Row="2">
             <Grid.Resources>
-                <Style x:Key="NumberButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                    <Setter Property="Command" Value="{Binding NumberCommand}"/>
+                <Style x:Key="AppendOriginalTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                    <Setter Property="Command" Value="{Binding AppendTextCommand}"/>
+                    <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
+                </Style>
+                <Style x:Key="AppendFunctionTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                    <Setter Property="Command" Value="{Binding AppendFunctionCommand}"/>
                     <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
                 </Style>
             </Grid.Resources>
@@ -71,41 +75,41 @@
                     <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
                 </UniformGrid.Resources>
 
-                <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                <Button Content="CE" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                <Button Content="⌫" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                <Button Content="(" Margin="4"/>
-                <Button Content=")" Margin="4"/>
+                <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="C"/>
+                <Button Content="CE" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="CE"/>
+                <Button Content="⌫" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteLastCharCommand}"/>
+                <Button Content="(" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content=")" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 
-                <Button Content="sin" Margin="4"/>
-                <Button Content="cos" Margin="4"/>
-                <Button Content="tan" Margin="4"/>
-                <Button Content="log" Margin="4"/>
-                <Button Content="√" Margin="4"/>
+                <Button Content="sin" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                <Button Content="cos" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                <Button Content="tan" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                <Button Content="log" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                <Button Content="√" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="sqrt("/>
 
-                <Button Content="xʸ" Margin="4"/>
-                <Button Content="x²" Margin="4"/>
-                <Button Content="7" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="8" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="9" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="xʸ" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^"/>
+                <Button Content="x²" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^2"/>
+                <Button Content="7" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="8" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="9" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 
-                <Button Content="+" Margin="4"/>
-                <Button Content="-" Margin="4"/>
-                <Button Content="4" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="5" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="6" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="+" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="-" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="4" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="5" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="6" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 
-                <Button Content="×" Margin="4"/>
-                <Button Content="÷" Margin="4"/>
-                <Button Content="1" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="2" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="3" Margin="4" Style="{StaticResource NumberButton}"/>
+                <Button Content="×" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="*"/>
+                <Button Content="÷" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="/"/>
+                <Button Content="1" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="2" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="3" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 
-                <Button Content="e" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="π" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="0" Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="." Margin="4" Style="{StaticResource NumberButton}"/>
-                <Button Content="=" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                <Button Content="e" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="π" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="0" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="." Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Button Content="=" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding EqualsCommand}"/>
             </UniformGrid>
         </Grid>
     </Grid>
