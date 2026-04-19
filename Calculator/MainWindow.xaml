@@ -5,112 +5,153 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="Calculator" Height="550" Width="450" ResizeMode="CanMinimize">
+        Title="Calculator" Height="550" Width="650" ResizeMode="CanMinimize">
     <Window.DataContext>
         <local:FrontendViewModel/>
     </Window.DataContext>
     <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="220"/>
+        </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0"
-                Height="34"
-                Margin="0,0,0,10"
-                Padding="8,0"
-                BorderBrush="#FFD0D0D0"
-                BorderThickness="1"
-                CornerRadius="4"
-                Background="#FFF7F7F7">
-            <TextBlock VerticalAlignment="Center"
-                       Foreground="#FF666666"
-                       FontStyle="Italic"
-                       Text="Reserved space for future menu bar"/>
-        </Border>
-
-        <StackPanel Grid.Row="1" Margin="0,0,0,10">
-            <TextBox x:Name="UpperTextBox"
-                     Margin="0,0,0,6"
-                     Padding="8"
-                     FontSize="22"
-                     HorizontalContentAlignment="Right"
-                     VerticalContentAlignment="Center"
-                     Height="48"
-                     Text="{Binding UpperText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     IsReadOnly="True"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-            <TextBox x:Name="LowerTextBox"
-                     Padding="8"
-                     FontSize="28"
-                     FontWeight="SemiBold"
-                     HorizontalContentAlignment="Right"
-                     VerticalContentAlignment="Center"
-                     Height="56"
-                     Text="{Binding LowerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     IsReadOnly="True"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-        </StackPanel>
-
-        <Grid Grid.Row="2">
-            <Grid.Resources>
-                <Style x:Key="AppendOriginalTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                    <Setter Property="Command" Value="{Binding AppendTextCommand}"/>
-                    <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
-                </Style>
-                <Style x:Key="AppendFunctionTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
-                    <Setter Property="Command" Value="{Binding AppendFunctionCommand}"/>
-                    <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
-                </Style>
-            </Grid.Resources>
-            
+        <Grid Grid.Column="0" Margin="0,0,12,0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <UniformGrid Grid.Row="1" Rows="6" Columns="5">
-                <UniformGrid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
-                </UniformGrid.Resources>
+            <Border Grid.Row="0"
+                    Height="34"
+                    Margin="0,0,0,10"
+                    Padding="8,0"
+                    BorderBrush="#FFD0D0D0"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Background="#FFF7F7F7">
+                <TextBlock VerticalAlignment="Center"
+                           Foreground="#FF666666"
+                           FontStyle="Italic"
+                           Text="Reserved space for future menu bar"/>
+            </Border>
 
-                <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="C"/>
-                <Button Content="CE" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="CE"/>
-                <Button Content="⌫" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteLastCharCommand}"/>
-                <Button Content="(" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content=")" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                <TextBox x:Name="UpperTextBox"
+                         Margin="0,0,0,6"
+                         Padding="8"
+                         FontSize="22"
+                         HorizontalContentAlignment="Right"
+                         VerticalContentAlignment="Center"
+                         Height="48"
+                         Text="{Binding UpperText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                <TextBox x:Name="LowerTextBox"
+                         Padding="8"
+                         FontSize="28"
+                         FontWeight="SemiBold"
+                         HorizontalContentAlignment="Right"
+                         VerticalContentAlignment="Center"
+                         Height="56"
+                         Text="{Binding LowerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsReadOnly="True"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            </StackPanel>
 
-                <Button Content="sin" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
-                <Button Content="cos" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
-                <Button Content="tan" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
-                <Button Content="log" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
-                <Button Content="√" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="sqrt("/>
+            <Grid Grid.Row="2">
+                <Grid.Resources>
+                    <Style x:Key="AppendOriginalTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                        <Setter Property="Command" Value="{Binding AppendTextCommand}"/>
+                        <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
+                    </Style>
+                    <Style x:Key="AppendFunctionTextButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                        <Setter Property="Command" Value="{Binding AppendFunctionCommand}"/>
+                        <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
+                    </Style>
+                </Grid.Resources>
 
-                <Button Content="xʸ" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^"/>
-                <Button Content="x²" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^2"/>
-                <Button Content="7" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="8" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="9" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <Button Content="+" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="-" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="4" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="5" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="6" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                <UniformGrid Grid.Row="1" Rows="6" Columns="5">
+                    <UniformGrid.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
+                    </UniformGrid.Resources>
 
-                <Button Content="×" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="*"/>
-                <Button Content="÷" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="/"/>
-                <Button Content="1" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="2" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="3" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="C"/>
+                    <Button Content="CE" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="CE"/>
+                    <Button Content="⌫" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteLastCharCommand}"/>
+                    <Button Content="(" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content=")" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 
-                <Button Content="e" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="π" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="0" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="." Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
-                <Button Content="=" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding EqualsCommand}"/>
-            </UniformGrid>
+                    <Button Content="sin" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                    <Button Content="cos" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                    <Button Content="tan" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                    <Button Content="log" Margin="4" Style="{StaticResource AppendFunctionTextButton}"/>
+                    <Button Content="√" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="sqrt("/>
+
+                    <Button Content="xʸ" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^"/>
+                    <Button Content="x²" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="^2"/>
+                    <Button Content="7" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="8" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="9" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+
+                    <Button Content="+" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="-" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="4" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="5" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="6" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+
+                    <Button Content="×" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="*"/>
+                    <Button Content="÷" Margin="4" Command="{Binding AppendTextCommand}" CommandParameter="/"/>
+                    <Button Content="1" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="2" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="3" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+
+                    <Button Content="e" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="π" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="0" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="." Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
+                    <Button Content="=" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding EqualsCommand}"/>
+                </UniformGrid>
+            </Grid>
         </Grid>
+
+        <Border Grid.Column="1"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="4"
+                Padding="8"
+                Background="#FFFDFDFD">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Margin="0,0,0,8"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Text="Calculation History"
+                           HorizontalAlignment="Center"/>
+
+                <ListBox Grid.Row="1"
+                         x:Name="HistoryListBox"
+                         ItemsSource="{Binding CalculationHistory}"
+                         SelectionMode="Extended"
+                         Style="{StaticResource MaterialDesignListBox}"
+                         HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Right" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

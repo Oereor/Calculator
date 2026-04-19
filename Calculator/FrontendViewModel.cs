@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -57,6 +58,8 @@ namespace Calculator
             }
         }
 
+        public ObservableCollection<string> CalculationHistory { get; }
+
         public ICommand AppendTextCommand { get; }
 
         public ICommand AppendFunctionCommand { get; }
@@ -72,6 +75,7 @@ namespace Calculator
             UpperText = string.Empty;
             LowerText = string.Empty;
             _expression = string.Empty;
+            CalculationHistory = new ObservableCollection<string>();
             AppendTextCommand = new RelayCommand(AppendTextButtonClicked);
             AppendFunctionCommand = new RelayCommand(AppendFunctionButtonClicked);
             ClearCommand = new RelayCommand(ClearButtonClicked);
@@ -146,10 +150,20 @@ namespace Calculator
                 _expression += ')';
                 parenthesesStack.Pop();
             }
-            CalculateResult(_expression);
+            bool hasResult = CalculateResult(_expression);
+            if (hasResult)
+            {
+                CalculationHistory.Add($"{UpperText} =\n{LowerText}");
+            }
         }
 
-        private void CalculateResult(string expression)
+        /// <summary>
+        /// Calculates the result of the expression using the BackendCalculator and updates the UpperText and LowerText properties accordingly. 
+        /// If an error occurs during calculation, it displays an error message in the LowerText property.
+        /// </summary>
+        /// <param name="expression">The mathematical expression to be evaluated.</param>
+        /// <returns>true if no error occurred during calculation; otherwise, false.</returns>
+        private bool CalculateResult(string expression)
         {
             try
             {
@@ -157,11 +171,13 @@ namespace Calculator
                 _calculationResult = calculator.Result;
                 UpperText = expression;
                 LowerText = _calculationResult.ToString();
+                return true;
             }
             catch (Exception ex)
             {
                 UpperText = "Error";
                 LowerText = ex.Message;
+                return false;
             }
         }
 
