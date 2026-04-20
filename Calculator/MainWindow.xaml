@@ -96,9 +96,9 @@
                         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
                     </UniformGrid.Resources>
 
-                    <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="C"/>
-                    <Button Content="CE" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}" CommandParameter="CE"/>
+                    <Button Content="C" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ClearCommand}"/>
                     <Button Content="⌫" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteLastCharCommand}"/>
+                    <Button Content="Ans" Margin="4" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding InsertAnswerCommand}"/>
                     <Button Content="(" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
                     <Button Content=")" Margin="4" Style="{StaticResource AppendOriginalTextButton}"/>
 

@@ -66,6 +66,8 @@ namespace Calculator
 
         public ICommand ClearCommand { get; }
 
+        public ICommand InsertAnswerCommand { get; }
+
         public ICommand DeleteLastCharCommand { get; }
 
         public ICommand EqualsCommand { get; }
@@ -87,6 +89,7 @@ namespace Calculator
             EqualsCommand = new RelayCommand(EqualsButtonClicked);
             NumberKeyPressCommand = new RelayCommand(NumberKeyPressed);
             ClearCalculationHistoryCommand = new RelayCommand(ClearCalculationHistory);
+            InsertAnswerCommand = new RelayCommand(InsertAnswerButtonClicked);
         }
 
         private string _expression;
@@ -116,10 +119,7 @@ namespace Calculator
 
         private void ClearButtonClicked(object parameter)
         {
-            if (parameter is string clearType)
-            {
-                ClearText(clearType);
-            }
+            ClearText();
         }
 
         private void DeleteLastCharacter(object parameter)
@@ -182,6 +182,11 @@ namespace Calculator
             }
         }
 
+        private void InsertAnswerButtonClicked(object parameter)
+        {
+            LowerText += _calculationResult.ToString();
+        }
+
         private void ClearCalculationHistory(object parameter)
         {
             CalculationHistory.Clear();
@@ -203,6 +208,12 @@ namespace Calculator
                 LowerText = _calculationResult.ToString();
                 return true;
             }
+            catch (DivideByZeroException)
+            {
+                UpperText = "Error";
+                LowerText = "Division by zero is not allowed";
+                return false;
+            }
             catch (Exception ex)
             {
                 UpperText = "Error";
@@ -211,16 +222,15 @@ namespace Calculator
             }
         }
 
-        private void ClearText(string clearType)
+        private void ClearText()
         {
-            if (clearType == "C")
+            if (LowerText != string.Empty)
             {
-                UpperText = string.Empty;
                 LowerText = string.Empty;
             }
-            else if (clearType == "CE")
+            else
             {
-                LowerText = string.Empty;
+                UpperText = string.Empty;
             }
         }
 
