@@ -70,6 +70,10 @@ namespace Calculator
 
         public ICommand EqualsCommand { get; }
 
+        public ICommand NumberKeyPressCommand { get; }
+
+        public ICommand ClearCalculationHistoryCommand { get; }
+
         public FrontendViewModel()
         {
             UpperText = string.Empty;
@@ -81,6 +85,8 @@ namespace Calculator
             ClearCommand = new RelayCommand(ClearButtonClicked);
             DeleteLastCharCommand = new RelayCommand(DeleteLastCharacter);
             EqualsCommand = new RelayCommand(EqualsButtonClicked);
+            NumberKeyPressCommand = new RelayCommand(NumberKeyPressed);
+            ClearCalculationHistoryCommand = new RelayCommand(ClearCalculationHistory);
         }
 
         private string _expression;
@@ -155,6 +161,30 @@ namespace Calculator
             {
                 CalculationHistory.Add($"{UpperText} =\n{LowerText}");
             }
+        }
+
+        private void NumberKeyPressed(object parameter)
+        {
+            if (parameter is not KeyEventArgs e)
+            {
+                return;
+            }
+
+            if (e.Key >= Key.D0 && e.Key <= Key.D9)
+            {
+                LowerText += (e.Key - Key.D0).ToString();
+                return;
+            }
+            if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
+            {
+                LowerText += (e.Key - Key.NumPad0).ToString();
+                return;
+            }
+        }
+
+        private void ClearCalculationHistory(object parameter)
+        {
+            CalculationHistory.Clear();
         }
 
         /// <summary>
